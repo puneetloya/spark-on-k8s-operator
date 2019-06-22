@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Google LLC
+Copyright 2018 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,14 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package main
+package webhook
 
 import (
-	_ "k8s.io/client-go/plugin/pkg/client/auth"
-
-	"github.com/GoogleCloudPlatform/spark-on-k8s-operator/sparkctl/cmd"
+	admissionv1beta1 "k8s.io/api/admission/v1beta1"
+	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/runtime/serializer"
 )
 
-func main() {
-	cmd.Execute()
+var (
+	scheme = runtime.NewScheme()
+	codecs = serializer.NewCodecFactory(scheme)
+)
+
+func init() {
+	addToScheme(scheme)
+}
+
+func addToScheme(scheme *runtime.Scheme) {
+	corev1.AddToScheme(scheme)
+	admissionv1beta1.AddToScheme(scheme)
 }

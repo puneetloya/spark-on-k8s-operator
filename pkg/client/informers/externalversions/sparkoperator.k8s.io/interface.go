@@ -21,8 +21,8 @@ limitations under the License.
 package sparkoperator
 
 import (
-	internalinterfaces "k8s.io/spark-on-k8s-operator/pkg/client/informers/externalversions/internalinterfaces"
-	v1alpha1 "k8s.io/spark-on-k8s-operator/pkg/client/informers/externalversions/sparkoperator.k8s.io/v1alpha1"
+	internalinterfaces "github.com/GoogleCloudPlatform/spark-on-k8s-operator/pkg/client/informers/externalversions/internalinterfaces"
+	v1alpha1 "github.com/GoogleCloudPlatform/spark-on-k8s-operator/pkg/client/informers/externalversions/sparkoperator.k8s.io/v1alpha1"
 )
 
 // Interface provides access to each of this group's versions.

@@ -1,3 +1,4 @@
+
 /*
 Copyright 2017 Google LLC
 
@@ -24,9 +25,9 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"k8s.io/spark-on-k8s-operator/pkg/apis/sparkoperator.k8s.io/v1alpha1"
-	"k8s.io/spark-on-k8s-operator/pkg/config"
-	"k8s.io/spark-on-k8s-operator/pkg/util"
+	"github.com/GoogleCloudPlatform/spark-on-k8s-operator/pkg/apis/sparkoperator.k8s.io/v1alpha1"
+	"github.com/GoogleCloudPlatform/spark-on-k8s-operator/pkg/config"
+	"github.com/GoogleCloudPlatform/spark-on-k8s-operator/pkg/util"
 )
 
 const (
@@ -271,11 +272,11 @@ func addDriverConfOptions(app *v1alpha1.SparkApplication) ([]string, error) {
 	driverConfOptions = append(driverConfOptions, config.GetDriverConfigMapConfOptions(app)...)
 	driverConfOptions = append(driverConfOptions, config.GetDriverEnvVarConfOptions(app)...)
 
-	options, err := config.GetDriverVolumeMountConfOptions(app)
-	if err != nil {
-		return nil, err
-	}
-	driverConfOptions = append(driverConfOptions, options...)
+	// options, err := config.GetDriverVolumeMountConfOptions(app)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// driverConfOptions = append(driverConfOptions, options...)
 
 	return driverConfOptions, nil
 }
@@ -337,11 +338,11 @@ func addExecutorConfOptions(app *v1alpha1.SparkApplication) ([]string, error) {
 	executorConfOptions = append(executorConfOptions, config.GetExecutorConfigMapConfOptions(app)...)
 	executorConfOptions = append(executorConfOptions, config.GetExecutorEnvVarConfOptions(app)...)
 
-	options, err := config.GetExecutorVolumeMountConfOptions(app)
-	if err != nil {
-		return nil, err
-	}
-	executorConfOptions = append(executorConfOptions, options...)
+	// options, err := config.GetExecutorVolumeMountConfOptions(app)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// executorConfOptions = append(executorConfOptions, options...)
 
 	return executorConfOptions, nil
 }

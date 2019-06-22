@@ -32,8 +32,8 @@ import (
 	clienttesting "k8s.io/client-go/testing"
 	"k8s.io/client-go/tools/cache"
 
-	"k8s.io/spark-on-k8s-operator/pkg/config"
-	"k8s.io/spark-on-k8s-operator/pkg/util"
+	"github.com/GoogleCloudPlatform/spark-on-k8s-operator/pkg/config"
+	"github.com/GoogleCloudPlatform/spark-on-k8s-operator/pkg/util"
 )
 
 func TestAddAndDeleteInitializationConfig(t *testing.T) {

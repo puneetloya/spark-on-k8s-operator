@@ -333,6 +333,27 @@ type SparkPodSpec struct {
 	// VolumeMounts specifies the volumes listed in ".spec.volumes" to mount into the main container's filesystem.
 	// Optional.
 	VolumeMounts []apiv1.VolumeMount `json:"volumeMounts,omitempty"`
+	// Affinity specifies the affinity/anti-affinity settings for the pod.
+	// Optional.
+	Affinity *apiv1.Affinity `json:"affinity,omitempty"`
+	// Tolerations specifies the tolerations listed in ".spec.tolerations" to be applied to the pod.
+	// Optional.
+	Tolerations []apiv1.Toleration `json:"tolerations,omitempty"`
+	// SecurityContenxt specifies the PodSecurityContext to apply.
+	// Optional.
+	SecurityContenxt *apiv1.PodSecurityContext `json:"securityContext,omitempty"`
+	// SchedulerName specifies the scheduler that will be used for scheduling
+	// Optional.
+	SchedulerName *string `json:"schedulerName,omitempty"`
+	// Sidecars is a list of sidecar containers that run along side the main Spark container.
+	// Optional.
+	Sidecars []apiv1.Container `json:"sidecars,omitempty"`
+	// HostNetwork indicates whether to request host networking for the pod or not.
+	// Optional.
+	HostNetwork *bool `json:"hostNetwork,omitempty"`
+	// DnsConfig dns settings for the pod, following the Kubernetes specifications.
+	// Optional.
+	DNSConfig *apiv1.PodDNSConfig `json:"dnsConfig,omitempty"`
 }
 
 // DriverSpec is specification of the driver.

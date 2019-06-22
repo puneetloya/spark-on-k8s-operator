@@ -20,9 +20,12 @@ import (
 	"encoding/base64"
 	"hash"
 	"hash/fnv"
+	"reflect"
 
 	apiv1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"github.com/GoogleCloudPlatform/spark-on-k8s-operator/pkg/apis/sparkoperator.k8s.io/v1alpha1"
+	"github.com/GoogleCloudPlatform/spark-on-k8s-operator/pkg/config"
 )
 
 // NewHash32 returns a 32-bit hash computed from the given byte slice.
@@ -102,4 +105,32 @@ func UnmarshalOwnerReference(ownerReferenceStr string) (*metav1.OwnerReference, 
 		return nil, err
 	}
 	return ownerReference, nil
+}
+
+
+// IsLaunchedBySparkOperator returns whether the given pod is launched by the Spark Operator.
+func IsLaunchedBySparkOperator(pod *apiv1.Pod) bool {
+	return pod.Labels[config.LaunchedBySparkOperatorLabel] == "true"
+}
+
+// IsDriverPod returns whether the given pod is a Spark driver Pod.
+func IsDriverPod(pod *apiv1.Pod) bool {
+	return pod.Labels[config.SparkRoleLabel] == config.SparkDriverRole
+}
+
+// IsExecutorPod returns whether the given pod is a Spark executor Pod.
+func IsExecutorPod(pod *apiv1.Pod) bool {
+	return pod.Labels[config.SparkRoleLabel] == config.SparkExecutorRole
+}
+
+// GetOwnerReference returns an OwnerReference pointing to the given app.
+func GetOwnerReference(app *v1alpha1.SparkApplication) metav1.OwnerReference {
+	controller := true
+	return metav1.OwnerReference{
+		APIVersion: v1alpha1.SchemeGroupVersion.String(),
+		Kind:       reflect.TypeOf(v1alpha1.SparkApplication{}).Name(),
+		Name:       app.Name,
+		UID:        app.UID,
+		Controller: &controller,
+	}
 }

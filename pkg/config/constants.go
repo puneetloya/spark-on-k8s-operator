@@ -64,8 +64,18 @@ const (
 	SparkAppIDLabel = LabelAnnotationPrefix + "app-id"
 	// SparkAppNameLabel is the name of the label for the SparkApplication object name.
 	SparkAppNameLabel = LabelAnnotationPrefix + "app-name"
+	// AffinityAnnotation is the name of the annotation added to the driver and executor Pods that
+	// specifies the value of the Pod Affinity.
+	AffinityAnnotation = LabelAnnotationPrefix + "affinity"
+	TolerationsAnnotationPrefix = LabelAnnotationPrefix + "tolerations."
 	// LaunchedBySparkOperatorLabel is a label on Spark pods launched through the Spark Operator.
 	LaunchedBySparkOperatorLabel = LabelAnnotationPrefix + "launched-by-spark-operator"
+
+	SparkRoleLabel = "spark-role"
+	// SparkDriverRole is the value of the spark-role label for the driver.
+	SparkDriverRole = "driver"
+	// SparkExecutorRole is the value of the spark-role label for the executors.
+	SparkExecutorRole = "executor"
 )
 
 const (
