@@ -193,6 +193,7 @@ func (c *Controller) onUpdate(oldObj, newObj interface{}) {
 	// The spec has changed. This is currently best effort as we can potentially miss updates
 	// and end up in an inconsistent state.
 	if !equality.Semantic.DeepEqual(oldApp.Spec, newApp.Spec) {
+		glog.Error("onUpdate: Compared and they are unequal")
 		// Force-set the application status to Invalidating which handles clean-up and application re-run.
 		if _, err := c.updateApplicationStatusWithRetries(newApp, func(status *v1beta2.SparkApplicationStatus) {
 			status.AppState.State = v1beta2.InvalidatingState
@@ -503,7 +504,9 @@ func (c *Controller) syncSparkApplication(key string) error {
 	}
 
 	appToUpdate := app.DeepCopy()
-
+	glog.Errorf("syncSparkApplication: Before app update: %v", app.Spec.Driver)
+	glog.Errorf("syncSparkApplication: After app update: %v", appToUpdate.Spec.Driver)
+	glog.Errorf("syncSparkApplication: APP UPDATE STATE %s --> %v", app.Name, appToUpdate.Status.AppState.State)
 	// Take action based on application state.
 	switch appToUpdate.Status.AppState.State {
 	case v1beta2.NewState:
@@ -583,6 +586,7 @@ func (c *Controller) syncSparkApplication(key string) error {
 	if appToUpdate != nil {
 		glog.V(2).Infof("Trying to update SparkApplication %s/%s, from: [%v] to [%v]", app.Namespace, app.Name, app.Status, appToUpdate.Status)
 		err = c.updateStatusAndExportMetrics(app, appToUpdate)
+		glog.Errorf("syncSparkApplication: APP TO UPDATE STATUS: %v", appToUpdate.Status)
 		if err != nil {
 			glog.Errorf("failed to update SparkApplication %s/%s: %v", app.Namespace, app.Name, err)
 			return err
@@ -717,20 +721,24 @@ func (c *Controller) updateApplicationStatusWithRetries(
 	original *v1beta2.SparkApplication,
 	updateFunc func(status *v1beta2.SparkApplicationStatus)) (*v1beta2.SparkApplication, error) {
 	toUpdate := original.DeepCopy()
+	glog.Errorf("in updateApplicationStatusWithRetries: %v", toUpdate)
 	updateErr := wait.ExponentialBackoff(retry.DefaultBackoff, func() (ok bool, err error) {
 		updateFunc(&toUpdate.Status)
 		if equality.Semantic.DeepEqual(original.Status, toUpdate.Status) {
 			return true, nil
 		}
-
+		glog.Errorf("in retry exponential backoff, Original Status: %v", original.Status)
+		glog.Errorf("in retry exponential backoff, Before toUpdate Status: %v", toUpdate.Status)
 		toUpdate, err = c.crdClient.SparkoperatorV1beta2().SparkApplications(original.Namespace).Update(toUpdate)
+		glog.Errorf("in retry exponential backoff, After toUpdate Status: %v", toUpdate.Status)
 		if err == nil {
+			glog.Error("updateApplicationStatusWithRetries: No error returning back")
 			return true, nil
 		}
 		if !errors.IsConflict(err) {
 			return false, err
 		}
-
+		glog.Error("updateApplicationStatusWithRetries: there is a conflict")
 		// There was a conflict updating the SparkApplication, fetch the latest version from the API server.
 		toUpdate, err = c.crdClient.SparkoperatorV1beta2().SparkApplications(original.Namespace).Get(original.Name, metav1.GetOptions{})
 		if err != nil {
@@ -746,7 +754,7 @@ func (c *Controller) updateApplicationStatusWithRetries(
 		glog.Errorf("failed to update SparkApplication %s/%s: %v", original.Namespace, original.Name, updateErr)
 		return nil, updateErr
 	}
-
+	glog.Errorf("updateApplicationStatusWithRetries - final update: %v", toUpdate)
 	return toUpdate, nil
 }
 
@@ -754,10 +762,12 @@ func (c *Controller) updateApplicationStatusWithRetries(
 func (c *Controller) updateStatusAndExportMetrics(oldApp, newApp *v1beta2.SparkApplication) error {
 	// Skip update if nothing changed.
 	if equality.Semantic.DeepEqual(oldApp, newApp) {
+		glog.Error("updateStatusAndExportMetrics: Nothing changed")
 		return nil
 	}
 
 	updatedApp, err := c.updateApplicationStatusWithRetries(oldApp, func(status *v1beta2.SparkApplicationStatus) {
+		glog.Errorf("updateStatusAndExportMetrics status: %v", newApp.Status)
 		*status = newApp.Status
 	})
 
@@ -788,9 +798,8 @@ func (c *Controller) deleteSparkResources(app *v1beta2.SparkApplication) error {
 	if driverPodName == "" {
 		driverPodName = getDriverPodName(app)
 	}
-
 	glog.V(2).Infof("Deleting pod %s in namespace %s", driverPodName, app.Namespace)
-	err := c.kubeClient.CoreV1().Pods(app.Namespace).Delete(driverPodName, metav1.NewDeleteOptions(0))
+	err := c.kubeClient.CoreV1().Pods(app.Namespace).Delete(driverPodName, metav1.NewDeleteOptions(*app.Spec.Driver.GracePeriodSeconds))
 	if err != nil && !errors.IsNotFound(err) {
 		return err
 	}

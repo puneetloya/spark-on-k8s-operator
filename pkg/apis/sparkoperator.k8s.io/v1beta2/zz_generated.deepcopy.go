@@ -155,6 +155,16 @@ func (in *DriverSpec) DeepCopyInto(out *DriverSpec) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.Lifecycle != nil {
+		in, out := &in.Lifecycle, &out.Lifecycle
+		*out = new(v1.Lifecycle)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.GracePeriodSeconds != nil {
+		in, out := &in.GracePeriodSeconds, &out.GracePeriodSeconds
+		*out = new(int64)
+		**out = **in
+	}
 	return
 }
 

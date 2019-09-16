@@ -458,6 +458,10 @@ type DriverSpec struct {
 	// JavaOptions is a string of extra JVM options to pass to the driver. For instance,
 	// GC settings or other logging.
 	JavaOptions *string `json:"javaOptions,omitempty"`
+	// Adding preStop/postStart for driver pod
+	Lifecycle *apiv1.Lifecycle `json:"lifecycle,omitempty"`
+	// Grace period for driver pod termination
+	GracePeriodSeconds *int64 `json:"gracePeriodSeconds,omitempty"`
 }
 
 // ExecutorSpec is specification of the executor.

@@ -47,6 +47,10 @@ func patchSparkPod(pod *corev1.Pod, app *v1beta2.SparkApplication) []patchOperat
 
 	if util.IsDriverPod(pod) {
 		patchOps = append(patchOps, addOwnerReference(pod, app))
+		op := addPodLifeCycleConfig(pod, app)
+		if op != nil {
+			patchOps = append(patchOps, *op)
+		}
 	}
 	patchOps = append(patchOps, addVolumes(pod, app)...)
 	patchOps = append(patchOps, addGeneralConfigMaps(pod, app)...)
@@ -432,6 +436,25 @@ func addGPU(pod *corev1.Pod, app *v1beta2.SparkApplication) *patchOperation {
 		value = *resource.NewQuantity(gpu.Quantity, resource.DecimalSI)
 	}
 	return &patchOperation{Op: "add", Path: path, Value: value}
+}
+
+func addPodLifeCycleConfig(pod *corev1.Pod, app *v1beta2.SparkApplication) *patchOperation {
+		var lifeCycle *corev1.Lifecycle
+		if util.IsDriverPod(pod) {
+			lifeCycle = app.Spec.Driver.Lifecycle
+		}
+		if lifeCycle == nil {
+			return nil
+		}
+		i := 0
+		// Find the driver container in the pod.
+		for ; i < len(pod.Spec.Containers); i++ {
+			if pod.Spec.Containers[i].Name == config.SparkDriverContainerName  {
+				break
+			}
+		}
+		path := fmt.Sprintf("/spec/containers/%d/lifecycle", i)
+		return &patchOperation{Op: "add", Path: path, Value: *lifeCycle}
 }
 
 func addHostNetwork(pod *corev1.Pod, app *v1beta2.SparkApplication) []patchOperation {

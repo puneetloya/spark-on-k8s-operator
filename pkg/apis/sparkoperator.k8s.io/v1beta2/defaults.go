@@ -42,7 +42,6 @@ func SetSparkApplicationDefaults(app *SparkApplication) {
 			*app.Spec.RestartPolicy.OnSubmissionFailureRetryInterval = 5
 		}
 	}
-
 	setDriverSpecDefaults(app.Spec.Driver)
 	setExecutorSpecDefaults(app.Spec.Executor)
 }
@@ -55,6 +54,10 @@ func setDriverSpecDefaults(spec DriverSpec) {
 	if spec.Memory == nil {
 		spec.Memory = new(string)
 		*spec.Memory = "1g"
+	}
+	if spec.GracePeriodSeconds == nil {
+		spec.GracePeriodSeconds = new(int64)
+		*spec.GracePeriodSeconds = 30
 	}
 }
 
