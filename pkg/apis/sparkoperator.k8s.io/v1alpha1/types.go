@@ -365,6 +365,23 @@ type SparkPodSpec struct {
 	// Tolerations specifies the tolerations listed in ".spec.tolerations" to be applied to the pod.
 	// Optional.
 	Tolerations []apiv1.Toleration `json:"tolerations,omitempty"`
+	// SecurityContenxt specifies the PodSecurityContext to apply.
+	// Optional.
+	SecurityContenxt *apiv1.PodSecurityContext `json:"securityContext,omitempty"`
+	// SchedulerName specifies the scheduler that will be used for scheduling
+	// Optional.
+	SchedulerName *string `json:"schedulerName,omitempty"`
+	// Sidecars is a list of sidecar containers that run along side the main Spark container.
+	// Optional.
+	Sidecars []apiv1.Container `json:"sidecars,omitempty"`
+	// HostNetwork indicates whether to request host networking for the pod or not.
+	// Optional.
+	HostNetwork *bool `json:"hostNetwork,omitempty"`
+	// DnsConfig dns settings for the pod, following the Kubernetes specifications.
+	// Optional.
+	DNSConfig *apiv1.PodDNSConfig `json:"dnsConfig,omitempty"`
+	// Graceperiod for pod termination
+	GracePeriodSeconds *int64 `json:"gracePeriodSeconds,omitempty"`
 }
 
 // DriverSpec is specification of the driver.
@@ -382,6 +399,8 @@ type DriverSpec struct {
 	// JavaOptions is a string of extra JVM options to pass to the driver. For instance,
 	// GC settings or other logging.
 	JavaOptions *string `json:"javaOptions,omitempty"`
+	// Adding preStop for driver pod
+	Lifecycle *apiv1.Lifecycle `json:"lifecycle,omitempty"`
 }
 
 // ExecutorSpec is specification of the executor.
