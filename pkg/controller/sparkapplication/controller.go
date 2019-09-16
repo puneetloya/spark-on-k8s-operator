@@ -597,8 +597,12 @@ func (c *Controller) handleResubmission(app *v1alpha1.SparkApplication, submissi
 
 func (c *Controller) deleteDriverAndUIService(app *v1alpha1.SparkApplication, waitForDriverDeletion bool) error {
 	if app.Status.DriverInfo.PodName != "" {
+		var gracePeriod int64 = 0
+		if app.Spec.GracePeriodSeconds != nil{
+			gracePeriod = *app.Spec.GracePeriodSeconds
+		}
 		err := c.kubeClient.CoreV1().Pods(app.Namespace).Delete(app.Status.DriverInfo.PodName,
-			metav1.NewDeleteOptions(0))
+			metav1.NewDeleteOptions(gracePeriod))
 		if err != nil && !errors.IsNotFound(err) {
 			return err
 		}

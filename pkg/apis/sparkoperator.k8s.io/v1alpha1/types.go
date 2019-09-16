@@ -212,6 +212,8 @@ type SparkApplicationSpec struct {
 	// SubmissionRetryInterval is the unit of intervals in seconds between submission retries.
 	// Optional.
 	SubmissionRetryInterval *int64 `json:"submissionRetryInterval,omitempty"`
+	// Graceperiod for driver pod termination
+	GracePeriodSeconds *int64 `json:"gracePeriodSeconds,omitempty"`
 }
 
 // ApplicationStateType represents the type of the current state of an application.
@@ -368,6 +370,8 @@ type DriverSpec struct {
 	// ServiceAccount is the name of the Kubernetes service account used by the driver pod
 	// when requesting executor pods from the API server.
 	ServiceAccount *string `json:"serviceAccount,omitempty"`
+	// Adding preStop for driver pod
+	Lifecycle *apiv1.Lifecycle `json:"lifecycle,omitempty"`
 }
 
 // ExecutorSpec is specification of the executor.
