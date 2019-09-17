@@ -1108,6 +1108,50 @@ func TestPatchSparkPod_HostNetwork(t *testing.T) {
 	}
 }
 
+func TestPatchSparkPod_Lifecycle(t *testing.T) {
+	app := &v1beta2.SparkApplication{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: "spark-test",
+			UID:  "spark-test-1",
+		},
+		Spec: v1beta2.SparkApplicationSpec{
+			Driver: v1beta2.DriverSpec{
+				Lifecycle: &corev1.Lifecycle{
+					PreStop: &corev1.Handler{
+						Exec: &corev1.ExecAction{
+							Command: []string{"/bin/sh", "-c", "echo \"can execute a prestop command\""},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	driverPod := &corev1.Pod{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: "spark-driver",
+			Labels: map[string]string{
+				config.SparkRoleLabel:               config.SparkDriverRole,
+				config.LaunchedBySparkOperatorLabel: "true",
+			},
+		},
+		Spec: corev1.PodSpec{
+			Containers: []corev1.Container{
+				{
+					Name:  config.SparkDriverContainerName,
+					Image: "spark-driver:latest",
+				},
+			},
+		},
+	}
+
+	modifiedDriverPod, err := getModifiedPod(driverPod, app)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert.Equal(t, app.Spec.Driver.Lifecycle, modifiedDriverPod.Spec.Containers[0].Lifecycle)
+}
+
 func getModifiedPod(pod *corev1.Pod, app *v1beta2.SparkApplication) (*corev1.Pod, error) {
 	patchOps := patchSparkPod(pod, app)
 	patchBytes, err := json.Marshal(patchOps)

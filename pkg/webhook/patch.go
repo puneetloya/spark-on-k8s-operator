@@ -47,10 +47,6 @@ func patchSparkPod(pod *corev1.Pod, app *v1beta2.SparkApplication) []patchOperat
 
 	if util.IsDriverPod(pod) {
 		patchOps = append(patchOps, addOwnerReference(pod, app))
-		op := addPodLifeCycleConfig(pod, app)
-		if op != nil {
-			patchOps = append(patchOps, *op)
-		}
 	}
 	patchOps = append(patchOps, addVolumes(pod, app)...)
 	patchOps = append(patchOps, addGeneralConfigMaps(pod, app)...)
@@ -81,6 +77,11 @@ func patchSparkPod(pod *corev1.Pod, app *v1beta2.SparkApplication) []patchOperat
 	}
 
 	op = addGPU(pod, app)
+	if op != nil {
+		patchOps = append(patchOps, *op)
+	}
+
+	op := addPodLifeCycleConfig(pod, app)
 	if op != nil {
 		patchOps = append(patchOps, *op)
 	}
