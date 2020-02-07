@@ -63,39 +63,23 @@ func (in *Dependencies) DeepCopyInto(out *Dependencies) {
 	}
 	if in.JarsDownloadDir != nil {
 		in, out := &in.JarsDownloadDir, &out.JarsDownloadDir
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(string)
-			**out = **in
-		}
+		*out = new(string)
+		**out = **in
 	}
 	if in.FilesDownloadDir != nil {
 		in, out := &in.FilesDownloadDir, &out.FilesDownloadDir
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(string)
-			**out = **in
-		}
+		*out = new(string)
+		**out = **in
 	}
 	if in.DownloadTimeout != nil {
 		in, out := &in.DownloadTimeout, &out.DownloadTimeout
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(int32)
-			**out = **in
-		}
+		*out = new(int32)
+		**out = **in
 	}
 	if in.MaxSimultaneousDownloads != nil {
 		in, out := &in.MaxSimultaneousDownloads, &out.MaxSimultaneousDownloads
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(int32)
-			**out = **in
-		}
+		*out = new(int32)
+		**out = **in
 	}
 	return
 }
@@ -132,21 +116,18 @@ func (in *DriverSpec) DeepCopyInto(out *DriverSpec) {
 	in.SparkPodSpec.DeepCopyInto(&out.SparkPodSpec)
 	if in.PodName != nil {
 		in, out := &in.PodName, &out.PodName
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(string)
-			**out = **in
-		}
+		*out = new(string)
+		**out = **in
 	}
 	if in.ServiceAccount != nil {
 		in, out := &in.ServiceAccount, &out.ServiceAccount
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(string)
-			**out = **in
-		}
+		*out = new(string)
+		**out = **in
+	}
+	if in.Lifecycle != nil {
+		in, out := &in.Lifecycle, &out.Lifecycle
+		*out = new(v1.Lifecycle)
+		(*in).DeepCopyInto(*out)
 	}
 	return
 }
@@ -167,21 +148,13 @@ func (in *ExecutorSpec) DeepCopyInto(out *ExecutorSpec) {
 	in.SparkPodSpec.DeepCopyInto(&out.SparkPodSpec)
 	if in.Instances != nil {
 		in, out := &in.Instances, &out.Instances
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(int32)
-			**out = **in
-		}
+		*out = new(int32)
+		**out = **in
 	}
 	if in.CoreRequest != nil {
 		in, out := &in.CoreRequest, &out.CoreRequest
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(string)
-			**out = **in
-		}
+		*out = new(string)
+		**out = **in
 	}
 	return
 }
@@ -295,30 +268,18 @@ func (in *ScheduledSparkApplicationSpec) DeepCopyInto(out *ScheduledSparkApplica
 	in.Template.DeepCopyInto(&out.Template)
 	if in.Suspend != nil {
 		in, out := &in.Suspend, &out.Suspend
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(bool)
-			**out = **in
-		}
+		*out = new(bool)
+		**out = **in
 	}
 	if in.SuccessfulRunHistoryLimit != nil {
 		in, out := &in.SuccessfulRunHistoryLimit, &out.SuccessfulRunHistoryLimit
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(int32)
-			**out = **in
-		}
+		*out = new(int32)
+		**out = **in
 	}
 	if in.FailedRunHistoryLimit != nil {
 		in, out := &in.FailedRunHistoryLimit, &out.FailedRunHistoryLimit
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(int32)
-			**out = **in
-		}
+		*out = new(int32)
+		**out = **in
 	}
 	return
 }
@@ -443,30 +404,18 @@ func (in *SparkApplicationSpec) DeepCopyInto(out *SparkApplicationSpec) {
 	*out = *in
 	if in.Image != nil {
 		in, out := &in.Image, &out.Image
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(string)
-			**out = **in
-		}
+		*out = new(string)
+		**out = **in
 	}
 	if in.InitContainerImage != nil {
 		in, out := &in.InitContainerImage, &out.InitContainerImage
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(string)
-			**out = **in
-		}
+		*out = new(string)
+		**out = **in
 	}
 	if in.ImagePullPolicy != nil {
 		in, out := &in.ImagePullPolicy, &out.ImagePullPolicy
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(string)
-			**out = **in
-		}
+		*out = new(string)
+		**out = **in
 	}
 	if in.ImagePullSecrets != nil {
 		in, out := &in.ImagePullSecrets, &out.ImagePullSecrets
@@ -475,21 +424,13 @@ func (in *SparkApplicationSpec) DeepCopyInto(out *SparkApplicationSpec) {
 	}
 	if in.MainClass != nil {
 		in, out := &in.MainClass, &out.MainClass
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(string)
-			**out = **in
-		}
+		*out = new(string)
+		**out = **in
 	}
 	if in.MainApplicationFile != nil {
 		in, out := &in.MainApplicationFile, &out.MainApplicationFile
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(string)
-			**out = **in
-		}
+		*out = new(string)
+		**out = **in
 	}
 	if in.Arguments != nil {
 		in, out := &in.Arguments, &out.Arguments
@@ -512,21 +453,13 @@ func (in *SparkApplicationSpec) DeepCopyInto(out *SparkApplicationSpec) {
 	}
 	if in.SparkConfigMap != nil {
 		in, out := &in.SparkConfigMap, &out.SparkConfigMap
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(string)
-			**out = **in
-		}
+		*out = new(string)
+		**out = **in
 	}
 	if in.HadoopConfigMap != nil {
 		in, out := &in.HadoopConfigMap, &out.HadoopConfigMap
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(string)
-			**out = **in
-		}
+		*out = new(string)
+		**out = **in
 	}
 	if in.Volumes != nil {
 		in, out := &in.Volumes, &out.Volumes
@@ -547,21 +480,18 @@ func (in *SparkApplicationSpec) DeepCopyInto(out *SparkApplicationSpec) {
 	}
 	if in.MaxSubmissionRetries != nil {
 		in, out := &in.MaxSubmissionRetries, &out.MaxSubmissionRetries
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(int32)
-			**out = **in
-		}
+		*out = new(int32)
+		**out = **in
 	}
 	if in.SubmissionRetryInterval != nil {
 		in, out := &in.SubmissionRetryInterval, &out.SubmissionRetryInterval
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(int64)
-			**out = **in
-		}
+		*out = new(int64)
+		**out = **in
+	}
+	if in.GracePeriodSeconds != nil {
+		in, out := &in.GracePeriodSeconds, &out.GracePeriodSeconds
+		*out = new(int64)
+		**out = **in
 	}
 	return
 }
@@ -608,39 +538,23 @@ func (in *SparkPodSpec) DeepCopyInto(out *SparkPodSpec) {
 	*out = *in
 	if in.Cores != nil {
 		in, out := &in.Cores, &out.Cores
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(float32)
-			**out = **in
-		}
+		*out = new(float32)
+		**out = **in
 	}
 	if in.CoreLimit != nil {
 		in, out := &in.CoreLimit, &out.CoreLimit
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(string)
-			**out = **in
-		}
+		*out = new(string)
+		**out = **in
 	}
 	if in.Memory != nil {
 		in, out := &in.Memory, &out.Memory
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(string)
-			**out = **in
-		}
+		*out = new(string)
+		**out = **in
 	}
 	if in.Image != nil {
 		in, out := &in.Image, &out.Image
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(string)
-			**out = **in
-		}
+		*out = new(string)
+		**out = **in
 	}
 	if in.ConfigMaps != nil {
 		in, out := &in.ConfigMaps, &out.ConfigMaps
@@ -686,6 +600,45 @@ func (in *SparkPodSpec) DeepCopyInto(out *SparkPodSpec) {
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
+	}
+	if in.Affinity != nil {
+		in, out := &in.Affinity, &out.Affinity
+		*out = new(v1.Affinity)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.Tolerations != nil {
+		in, out := &in.Tolerations, &out.Tolerations
+		*out = make([]v1.Toleration, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.SecurityContenxt != nil {
+		in, out := &in.SecurityContenxt, &out.SecurityContenxt
+		*out = new(v1.PodSecurityContext)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.SchedulerName != nil {
+		in, out := &in.SchedulerName, &out.SchedulerName
+		*out = new(string)
+		**out = **in
+	}
+	if in.Sidecars != nil {
+		in, out := &in.Sidecars, &out.Sidecars
+		*out = make([]v1.Container, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.HostNetwork != nil {
+		in, out := &in.HostNetwork, &out.HostNetwork
+		*out = new(bool)
+		**out = **in
+	}
+	if in.DNSConfig != nil {
+		in, out := &in.DNSConfig, &out.DNSConfig
+		*out = new(v1.PodDNSConfig)
+		(*in).DeepCopyInto(*out)
 	}
 	return
 }

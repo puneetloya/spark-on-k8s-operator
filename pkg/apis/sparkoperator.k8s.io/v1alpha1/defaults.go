@@ -30,6 +30,11 @@ func SetSparkApplicationDefaults(app *SparkApplication) {
 		app.Spec.RestartPolicy = Never
 	}
 
+	if app.Spec.GracePeriodSeconds == nil {
+		app.Spec.GracePeriodSeconds = new(int64)
+		*app.Spec.GracePeriodSeconds = 30
+	}
+
 	setDriverSpecDefaults(app.Spec.Driver)
 	setExecutorSpecDefaults(app.Spec.Executor)
 }
@@ -43,6 +48,7 @@ func setDriverSpecDefaults(spec DriverSpec) {
 		spec.Memory = new(string)
 		*spec.Memory = "1g"
 	}
+
 }
 
 func setExecutorSpecDefaults(spec ExecutorSpec) {
